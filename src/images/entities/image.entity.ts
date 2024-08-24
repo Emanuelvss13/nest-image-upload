@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { BaseEntity } from '../../global/entities/base.entity';
 import { User } from '../../user/entities/user.entity';
 import { Transaction } from './transaction.entity';
 
@@ -8,7 +9,7 @@ export class Image extends BaseEntity {
   url: string;
 
   @Column()
-  path: string;
+  storageId: string;
 
   @ManyToOne(() => User, (User) => User.images)
   user: User;

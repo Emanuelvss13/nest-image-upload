@@ -1,11 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { CreateImageDto } from './dto/create-image.dto';
+import { Inject, Injectable } from '@nestjs/common';
+import { REPOSITORY } from '../global/repository/repo.enum';
 import { UpdateImageDto } from './dto/update-image.dto';
+import { IImageRepository } from './repositories/image.repository';
+import { IStorageProvider } from './repositories/storage.provider';
 
 @Injectable()
 export class ImagesService {
-  create(createImageDto: CreateImageDto) {
-    return 'This action adds a new image';
+  constructor(
+    @Inject('CloudinaryStorage')
+    readonly storageProvider: IStorageProvider,
+    @Inject(REPOSITORY.IMAGE)
+    readonly imageRepository: IImageRepository,
+  ) {}
+
+  async upload(path: string, userId: string) {
+    const { public_id, url } = await this.storageProvider.upload(path);
+
+    return await this.imageRepository.create(url, public_id, userId);
   }
 
   findAll() {

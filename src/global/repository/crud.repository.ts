@@ -8,6 +8,7 @@ export interface ICrudRepository<I> {
       | 'hashPassword'
       | 'validatePassword'
       | 'accessToken'
+      | 'images'
     >,
   ): Promise<I>;
   update(data: Partial<I>): Promise<I>;

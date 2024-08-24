@@ -35,6 +35,7 @@ export class UserRepository implements IUserRepository {
       where: {
         id,
       },
+      relations: { images: true },
     });
 
     return user;
