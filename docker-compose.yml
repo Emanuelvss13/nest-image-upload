@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # app:
+  #   build:
+  #     context: . 
+  #     dockerfile: Dockerfile
+  #   container_name: library-app
+  #   ports:
+  #     - "3000:3000" 
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - DATABASE_HOST=db
+  #     - DATABASE_PORT=5432
+  #     - DATABASE_USER=postgres
+  #     - DATABASE_PASSWORD=postgres
+  #     - DATABASE_NAME=library
+  #   networks:
+  #     - app-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: image-upload-db
+    ports:
+      - "5436:5432" 
+    environment:
+      POSTGRES_DB: image-upload
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
