@@ -1,7 +1,8 @@
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../global/entities/base.entity';
+import { Image } from '../../images/entities/image.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -14,6 +15,9 @@ export class User extends BaseEntity {
   @Column()
   @Exclude()
   password: string;
+
+  @OneToMany(() => Image, (Image) => Image.user)
+  images: Image[];
 
   @BeforeInsert()
   @BeforeUpdate()
