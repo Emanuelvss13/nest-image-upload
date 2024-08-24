@@ -20,6 +20,7 @@ import { UserModule } from './user/user.module';
         database: configService.get<string>('DATABASE_NAME'),
         entities: ['dist/**/*.entity{.ts,.js}', 'src/**/*.entity{.ts}'],
         autoLoadEntities: true,
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),

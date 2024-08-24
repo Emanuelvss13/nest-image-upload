@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../global/entities/base.entity';
 
@@ -11,6 +12,7 @@ export class User extends BaseEntity {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @BeforeInsert()
