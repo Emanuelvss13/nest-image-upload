@@ -6,7 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/auth.guard';
+import { CurrentUser } from '../auth/current-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -27,7 +30,13 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Omit<User, 'password'>> {
+  @UseGuards(JwtAuthGuard)
+  findOne(
+    @CurrentUser() data,
+    @Param('id') id: string,
+  ): Promise<Omit<User, 'password'>> {
+    console.log(data);
+
     return this.userService.findOne(id);
   }
 

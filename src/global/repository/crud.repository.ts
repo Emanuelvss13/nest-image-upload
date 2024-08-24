@@ -2,7 +2,12 @@ export interface ICrudRepository<I> {
   create(
     data: Omit<
       I,
-      'id' | 'createdAt' | 'updatedAt' | 'hashPassword' | 'validatePassword'
+      | 'id'
+      | 'createdAt'
+      | 'updatedAt'
+      | 'hashPassword'
+      | 'validatePassword'
+      | 'accessToken'
     >,
   ): Promise<I>;
   update(data: Partial<I>): Promise<I>;

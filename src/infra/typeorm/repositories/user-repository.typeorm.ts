@@ -11,6 +11,16 @@ export class UserRepository implements IUserRepository {
     private typeorm: Repository<User>,
   ) {}
 
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.typeorm.findOneOrFail({
+      where: {
+        email,
+      },
+    });
+
+    return user;
+  }
+
   create(data: Omit<User, 'id'>): Promise<User> {
     const user = this.typeorm.create(data);
     return this.typeorm.save(user);
