@@ -20,7 +20,7 @@ export class AuthService {
       throw new UnauthorizedException('Email não encontrado');
     }
 
-    const validPassword = user.validatePassword(pass);
+    const validPassword = await user.validatePassword(pass);
 
     if (!validPassword) {
       throw new UnauthorizedException('Senha inválida');
