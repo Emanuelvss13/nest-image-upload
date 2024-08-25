@@ -9,6 +9,7 @@ export interface ICrudRepository<I> {
       | 'validatePassword'
       | 'accessToken'
       | 'images'
+      | 'transactions'
     >,
   ): Promise<I>;
   update(data: Partial<I>): Promise<I>;

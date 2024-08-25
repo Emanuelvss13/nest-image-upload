@@ -47,9 +47,9 @@ export class ImagesController {
     return this.imagesService.upload(file.path, user.id);
   }
 
-  @Get()
-  findAll() {
-    return this.imagesService.findAll();
+  @Get('/transaction/:id')
+  findTransactionById(@Param('id') id: string) {
+    return this.imagesService.findTransactionById(id);
   }
 
   @Delete(':id')

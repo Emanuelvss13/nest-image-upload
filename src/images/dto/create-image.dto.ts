@@ -1,1 +1,5 @@
-export class CreateImageDto {}
+export interface ICreateImageDto {
+  url: string;
+  storageId: string;
+  userId: string;
+}

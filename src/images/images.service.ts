@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { REPOSITORY } from '../global/repository/repo.enum';
 import { IImageRepository } from './repositories/image.repository';
 import { IStorageProvider } from './repositories/storage.provider';
@@ -13,14 +14,31 @@ export class ImagesService {
   constructor(
     @Inject('CloudinaryStorage')
     readonly storageProvider: IStorageProvider,
+    private eventEmitter: EventEmitter2,
     @Inject(REPOSITORY.IMAGE)
     readonly imageRepository: IImageRepository,
   ) {}
 
-  async upload(path: string, userId: string) {
-    const { public_id, url } = await this.storageProvider.upload(path);
+  async findTransactionById(id: string) {
+    const transaction = await this.imageRepository.findTransactionById(id);
 
-    return await this.imageRepository.create(url, public_id, userId);
+    if (!transaction) {
+      throw new BadRequestException('Transação não encontrada.');
+    }
+
+    return transaction;
+  }
+
+  async upload(path: string, userId: string) {
+    const transaction = await this.imageRepository.createTransaction(userId);
+
+    this.eventEmitter.emit('image.upload', {
+      path,
+      transactionId: transaction.id,
+      userId,
+    });
+
+    return transaction;
   }
 
   findAll() {

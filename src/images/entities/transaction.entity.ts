@@ -1,5 +1,6 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../global/entities/base.entity';
+import { User } from '../../user/entities/user.entity';
 import { Image } from './image.entity';
 import { TransactionStatus } from './transaction-status.enum';
 
@@ -16,5 +17,9 @@ export class Transaction extends BaseEntity {
   message: string;
 
   @OneToOne(() => Image, (Image) => Image.transaction)
+  @JoinColumn()
   image: Image;
+
+  @ManyToOne(() => User, (User) => User.transactions)
+  user: User;
 }
