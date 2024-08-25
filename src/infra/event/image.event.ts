@@ -9,16 +9,61 @@ import { IImageUpload } from '../../images/dto/image-upload.dto';
 import { TransactionStatus } from '../../images/entities/transaction-status.enum';
 import { IImageRepository } from '../../images/repositories/image.repository';
 import { IStorageProvider } from '../../images/repositories/storage.provider';
-import { IStorageEvent } from './model/storage.event';
+import { IImageEvent } from './model/image.model';
 
 @Injectable()
-export class StorageEvents implements IStorageEvent {
+export class ImageEvents implements IImageEvent {
   constructor(
     @Inject('CloudinaryStorage')
     readonly storageProvider: IStorageProvider,
     @Inject(REPOSITORY.IMAGE)
     readonly imageRepository: IImageRepository,
   ) {}
+
+  @OnEvent('image.delete')
+  async delete(
+    transactionId: string,
+    imageId: string,
+    storageId: string,
+  ): Promise<void> {
+    await this.imageRepository.updateTransaction(
+      transactionId,
+      null,
+      TransactionStatus.DELETE,
+      'Apagando imagem no servidor.',
+    );
+
+    try {
+      await this.imageRepository.delete(imageId);
+    } catch (error) {
+      await this.imageRepository.updateTransaction(
+        transactionId,
+        null,
+        TransactionStatus.ERROR,
+        'Erro ao apagar imagem do banco de dados: ' + (error.message || error),
+      );
+      return;
+    }
+
+    try {
+      await this.storageProvider.delete(storageId);
+    } catch (error) {
+      await this.imageRepository.updateTransaction(
+        transactionId,
+        null,
+        TransactionStatus.ERROR,
+        'Erro ao apagar imagem no servidor: ' + (error.message || error),
+      );
+      return;
+    }
+
+    await this.imageRepository.updateTransaction(
+      transactionId,
+      null,
+      TransactionStatus.SUCCESS,
+      'Imagem apagada com sucesso.',
+    );
+  }
 
   @OnEvent('image.upload')
   async save({ path, transactionId, userId }: IImageUpload): Promise<void> {

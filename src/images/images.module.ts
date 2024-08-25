@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { REPOSITORY } from '../global/repository/repo.enum';
 import { CloudinaryStorage } from '../infra/cloudinary/cloudinary.provider';
-import { StorageEvents } from '../infra/event/image-upload.event';
+import { ImageEvents } from '../infra/event/image.event';
 import { ImageRepository } from '../infra/typeorm/repositories/image-repository.typeorm';
 import { Image } from './entities/image.entity';
 import { Transaction } from './entities/transaction.entity';
@@ -14,7 +14,7 @@ import { ImagesService } from './images.service';
   imports: [ConfigModule, TypeOrmModule.forFeature([Image, Transaction])],
   controllers: [ImagesController],
   providers: [
-    StorageEvents,
+    ImageEvents,
     ImagesService,
     {
       provide: REPOSITORY.IMAGE,

@@ -46,10 +46,14 @@ export class ImageRepository implements IImageRepository {
     );
   }
 
-  async createTransaction(userId: string): Promise<Transaction> {
+  async createTransaction(
+    userId: string,
+    status: TransactionStatus,
+    message: string,
+  ): Promise<Transaction> {
     const transaction = await this.typeormTransaction.save({
-      status: TransactionStatus.IN_QUEUE,
-      message: 'Aguardando upload.',
+      status,
+      message,
       user: {
         id: userId,
       },

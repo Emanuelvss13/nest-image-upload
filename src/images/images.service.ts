@@ -1,11 +1,8 @@
-import {
-  BadGatewayException,
-  BadRequestException,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { REPOSITORY } from '../global/repository/repo.enum';
+import { TransactionStatus } from './entities/transaction-status.enum';
+import { Transaction } from './entities/transaction.entity';
 import { IImageRepository } from './repositories/image.repository';
 import { IStorageProvider } from './repositories/storage.provider';
 
@@ -30,7 +27,11 @@ export class ImagesService {
   }
 
   async upload(path: string, userId: string) {
-    const transaction = await this.imageRepository.createTransaction(userId);
+    const transaction = await this.imageRepository.createTransaction(
+      userId,
+      TransactionStatus.IN_QUEUE,
+      'Aguardando upload',
+    );
 
     this.eventEmitter.emit('image.upload', {
       path,
@@ -49,13 +50,13 @@ export class ImagesService {
     const image = await this.imageRepository.findById(id);
 
     if (!image) {
-      throw new BadGatewayException('Imagem não encontrada.');
+      throw new BadRequestException('Imagem não encontrada.');
     }
 
     return image;
   }
 
-  async delete(imageId: string, currentUserId: string) {
+  async delete(imageId: string, currentUserId: string): Promise<Transaction> {
     const image = await this.findOne(imageId);
 
     if (!image.belongsToUser(currentUserId)) {
@@ -64,8 +65,18 @@ export class ImagesService {
       );
     }
 
-    await this.storageProvider.delete(image.storageId);
+    const transaction = await this.imageRepository.createTransaction(
+      currentUserId,
+      TransactionStatus.IN_QUEUE,
+      'Aguardando exclusão da imagem',
+    );
 
-    await this.imageRepository.delete(image.id);
+    this.eventEmitter.emit('image.delete', {
+      imageId: image.id,
+      storageId: image.storageId,
+      transactionId: transaction.id,
+    });
+
+    return transaction;
   }
 }

@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from '@nestjs/common';
 import { IStorageProvider } from '../../images/repositories/storage.provider';
 
 import { v2 as cloudinary } from 'cloudinary';
@@ -13,6 +14,19 @@ export class CloudinaryStorage implements IStorageProvider {
       api_key: this.apiKey,
       api_secret: this.apiSecret,
     });
+  }
+  async exists(publicId: string): Promise<boolean> {
+    try {
+      const result = await cloudinary.api.resource(publicId);
+      return result && result.public_id === publicId;
+    } catch (error) {
+      if (error.http_code === 404) {
+        return false;
+      }
+      throw new InternalServerErrorException(
+        `Erro ao verificar a existência da imagem: ${error.message}`,
+      );
+    }
   }
 
   async upload(path: string) {

@@ -5,7 +5,11 @@ import { TransactionStatus } from './../entities/transaction-status.enum';
 
 export interface IImageRepository {
   create(data: ICreateImageDto): Promise<Image>;
-  createTransaction(userId: string): Promise<Transaction>;
+  createTransaction(
+    userId: string,
+    status: TransactionStatus,
+    message: string,
+  ): Promise<Transaction>;
   updateTransaction(
     id: string,
     imageId: string,
