@@ -34,7 +34,13 @@ Requisitos:
 - A aplicação deve garantir que os dados entre o banco de dados Postgres e o Cloudinary estejam sempre sincronizados.
 - Se uma operação falhar, a API deve ser capaz de lidar com isso e garantir que não haja inconsistências nos dados.
 
-
-
    -Desafio Extra (Opcional):
   - Implemente uma função de recuperação que, ao detectar uma inconsistência entre o Cloudinary e o banco de dados (por exemplo, uma imagem existente no banco de dados que foi deletada no Cloudinary), resolva automaticamente o problema.
+ 
+```bash
+# Se tiver o dokcer instalado, rode esse comando para criar um banco de dados:
+$ dokcer compose up -d
+
+# Rode a aplicação:
+$ npm run start
+```
