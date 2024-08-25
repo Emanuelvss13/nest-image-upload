@@ -27,7 +27,13 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<User> {
-    return await this.userRepository.findById(id);
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new BadRequestException('Usuário não encontrado');
+    }
+
+    return user;
   }
 
   async findByEmail(email: string): Promise<User> {
