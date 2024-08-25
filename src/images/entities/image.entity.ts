@@ -16,4 +16,8 @@ export class Image extends BaseEntity {
 
   @OneToOne(() => Transaction, (Transaction) => Transaction.image)
   transaction: Transaction;
+
+  public belongsToUser(userId: string): boolean {
+    return userId === this.user.id;
+  }
 }

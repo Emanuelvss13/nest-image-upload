@@ -13,8 +13,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { randomUUID } from 'crypto';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { JwtAuthGuard } from '../auth/auth.guard';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { JwtAuthGuard } from '../auth/custom-decorators/auth.guard';
+import { CurrentUser } from '../auth/custom-decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { ImagesService } from './images.service';
 

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtAuthGuard } from '../auth/auth.guard';
+import { JwtAuthGuard } from '../auth/custom-decorators/auth.guard';
 import { REPOSITORY } from '../global/repository/repo.enum';
 import { UserRepository } from '../infra/typeorm/repositories/user-repository.typeorm';
 import { User } from './entities/user.entity';
