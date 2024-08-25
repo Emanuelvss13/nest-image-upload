@@ -31,13 +31,13 @@ export class CheckInconsistency {
 
         if (!exists) {
           this.logger.warn(
-            `Imagem com ID ${image.id} não encontrada no Cloudinary. Removendo do banco de dados...`,
+            `Imagem com ID ${image.image_storageId} não encontrada no Cloudinary. Removendo do banco de dados...`,
           );
-          await this.imageRepository.remove(image);
+          await this.imageRepository.delete({ id: image.image_id });
         }
       } catch (error) {
         this.logger.error(
-          `Erro ao verificar imagem com ID ${image.id}: ${error.message}`,
+          `Erro ao verificar imagem com ID ${image.image_storageId}: ${error.message}`,
         );
       }
     }
