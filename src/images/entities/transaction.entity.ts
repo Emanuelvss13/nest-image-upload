@@ -16,7 +16,9 @@ export class Transaction extends BaseEntity {
   @Column()
   message: string;
 
-  @OneToOne(() => Image, (Image) => Image.transaction)
+  @OneToOne(() => Image, (Image) => Image.transaction, {
+    onDelete: 'SET NULL',
+  })
   @JoinColumn()
   image: Image;
 

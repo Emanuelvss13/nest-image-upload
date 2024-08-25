@@ -31,7 +31,7 @@ export class ImageEvents implements IImageEvent {
       transactionId,
       null,
       TransactionStatus.DELETE,
-      'Apagando imagem no servidor.',
+      'Apagando imagem.',
     );
 
     try {
@@ -72,7 +72,7 @@ export class ImageEvents implements IImageEvent {
       transactionId,
       null,
       TransactionStatus.UPLOADING,
-      'Enviando Imagem ao servidor.',
+      'Enviando Imagem.',
     );
 
     let uploadResult;
