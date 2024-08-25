@@ -1,8 +1,4 @@
-FROM node:18-alpine
-
-RUN apk add --no-cache \
-    bash \
-    git 
+FROM node:20
 
 WORKDIR /app
 
