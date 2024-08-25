@@ -1,6 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { REPOSITORY } from '../global/repository/repo.enum';
-import { UpdateImageDto } from './dto/update-image.dto';
 import { IImageRepository } from './repositories/image.repository';
 import { IStorageProvider } from './repositories/storage.provider';
 
@@ -23,15 +27,27 @@ export class ImagesService {
     return `This action returns all images`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} image`;
+  async findOne(id: string) {
+    const image = await this.imageRepository.findById(id);
+
+    if (!image) {
+      throw new BadGatewayException('Imagem não encontrada.');
+    }
+
+    return image;
   }
 
-  update(id: number, updateImageDto: UpdateImageDto) {
-    return `This action updates a #${id} image`;
-  }
+  async delete(imageId: string, currentUserId: string) {
+    const image = await this.findOne(imageId);
 
-  remove(id: number) {
-    return `This action removes a #${id} image`;
+    if (!image.belongsToUser(currentUserId)) {
+      throw new BadRequestException(
+        'Você não pode apagar as imagens de outro usuário',
+      );
+    }
+
+    await this.storageProvider.delete(image.storageId);
+
+    await this.imageRepository.delete(image.id);
   }
 }

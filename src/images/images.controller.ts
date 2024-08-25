@@ -1,11 +1,9 @@
 import {
   BadRequestException,
-  Body,
   Controller,
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   UploadedFile,
   UseGuards,
@@ -18,7 +16,6 @@ import { extname } from 'path';
 import { JwtAuthGuard } from '../auth/auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { User } from '../user/entities/user.entity';
-import { UpdateImageDto } from './dto/update-image.dto';
 import { ImagesService } from './images.service';
 
 @Controller('images')
@@ -55,18 +52,9 @@ export class ImagesController {
     return this.imagesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.imagesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateImageDto: UpdateImageDto) {
-    return this.imagesService.update(+id, updateImageDto);
-  }
-
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.imagesService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: string, @CurrentUser() { id: currentUserId }: User) {
+    return this.imagesService.delete(id, currentUserId);
   }
 }
