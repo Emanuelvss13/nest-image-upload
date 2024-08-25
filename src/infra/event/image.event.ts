@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { REPOSITORY } from '../../global/repository/repo.enum';
+import { IImageDelete } from '../../images/dto/image-delete.dto';
 import { IImageUpload } from '../../images/dto/image-upload.dto';
 import { TransactionStatus } from '../../images/entities/transaction-status.enum';
 import { IImageRepository } from '../../images/repositories/image.repository';
@@ -21,11 +22,11 @@ export class ImageEvents implements IImageEvent {
   ) {}
 
   @OnEvent('image.delete')
-  async delete(
-    transactionId: string,
-    imageId: string,
-    storageId: string,
-  ): Promise<void> {
+  async delete({
+    transactionId,
+    imageId,
+    storageId,
+  }: IImageDelete): Promise<void> {
     await this.imageRepository.updateTransaction(
       transactionId,
       null,
