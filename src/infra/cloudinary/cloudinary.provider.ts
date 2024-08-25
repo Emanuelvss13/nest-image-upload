@@ -23,7 +23,7 @@ export class CloudinaryStorage implements IStorageProvider {
     return { url, public_id };
   }
 
-  delete(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(storageId: string): Promise<void> {
+    await cloudinary.uploader.destroy(storageId);
   }
 }

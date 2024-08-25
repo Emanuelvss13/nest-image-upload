@@ -11,6 +11,17 @@ export class ImageRepository implements IImageRepository {
     private typeorm: Repository<Image>,
   ) {}
 
+  async findById(id: string): Promise<Image> {
+    const image = await this.typeorm.findOne({
+      where: {
+        id,
+      },
+      relations: { user: true },
+    });
+
+    return image;
+  }
+
   async create(url: string, storageId: string, userId: string): Promise<Image> {
     const image = await this.typeorm.save({
       url,
@@ -22,7 +33,7 @@ export class ImageRepository implements IImageRepository {
 
     return image;
   }
-  delete(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(id: string): Promise<void> {
+    await this.typeorm.delete({ id });
   }
 }

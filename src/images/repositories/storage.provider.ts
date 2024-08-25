@@ -1,4 +1,4 @@
 export interface IStorageProvider {
   upload(path: string): Promise<{ url: string; public_id: string }>;
-  delete(): Promise<void>;
+  delete(storageId: string): Promise<void>;
 }
