@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { REPOSITORY } from '../global/repository/repo.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,14 +12,18 @@ export class UserService {
     readonly userRepository: IUserRepository,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const existUser = await this.userRepository.findByEmail(
+      createUserDto.email,
+    );
+
+    if (!existUser) {
+      throw new BadRequestException('Email ja utilizado.');
+    }
+
     const user = await this.userRepository.create(createUserDto);
 
     return user;
-  }
-
-  findAll() {
-    return `This action returns all user`;
   }
 
   async findOne(id: string): Promise<User> {
@@ -30,11 +34,40 @@ export class UserService {
     return await this.userRepository.findByEmail(email);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    currentUserId: string,
+  ): Promise<User> {
+    if (id !== currentUserId) {
+      throw new BadRequestException(
+        'Não é possível atualizar outros usuários.',
+      );
+    }
+
+    if (updateUserDto.email) {
+      const existUser = await this.userRepository.findByEmail(
+        updateUserDto.email,
+      );
+
+      if (existUser) {
+        throw new BadRequestException('Email ja utilizado.');
+      }
+    }
+
+    const user = await this.userRepository.update({
+      id,
+      ...updateUserDto,
+    });
+
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async delete(id: string, currentUserId: string) {
+    if (id !== currentUserId) {
+      throw new BadRequestException('Não é possível apagar outros usuários.');
+    }
+
+    return await this.userRepository.delete(id);
   }
 }
