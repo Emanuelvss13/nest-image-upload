@@ -4,12 +4,15 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ImagesModule } from './images/images.module';
+import { CheckInconsistencyModule } from './infra/syncronize/syncronize.module';
 import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     UserModule,
     AuthModule,
+    ImagesModule,
+    CheckInconsistencyModule,
     EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -29,7 +32,6 @@ import { UserModule } from './user/user.module';
       }),
       inject: [ConfigService],
     }),
-    ImagesModule,
   ],
 })
 export class AppModule {}
