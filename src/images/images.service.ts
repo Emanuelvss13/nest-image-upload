@@ -1,6 +1,7 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { REPOSITORY } from '../global/repository/repo.enum';
+import { Image } from './entities/image.entity';
 import { TransactionStatus } from './entities/transaction-status.enum';
 import { Transaction } from './entities/transaction.entity';
 import { IImageRepository } from './repositories/image.repository';
@@ -15,6 +16,10 @@ export class ImagesService {
     @Inject(REPOSITORY.IMAGE)
     readonly imageRepository: IImageRepository,
   ) {}
+
+  async findImagesByUserId(userId: string): Promise<Image[]> {
+    return this.imageRepository.findImagesByUserId(userId);
+  }
 
   async findTransactionById(id: string) {
     const transaction = await this.imageRepository.findTransactionById(id);

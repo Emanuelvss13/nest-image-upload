@@ -16,6 +16,7 @@ import { extname } from 'path';
 import { JwtAuthGuard } from '../auth/custom-decorators/auth.guard';
 import { CurrentUser } from '../auth/custom-decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
+import { Image } from './entities/image.entity';
 import { ImagesService } from './images.service';
 
 @Controller('images')
@@ -45,6 +46,12 @@ export class ImagesController {
     }
 
     return this.imagesService.upload(file.path, user.id);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async findImagesByUser(@CurrentUser() { id }: User): Promise<Image[]> {
+    return this.imagesService.findImagesByUserId(id);
   }
 
   @Get('/transaction/:id')

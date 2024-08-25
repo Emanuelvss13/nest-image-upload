@@ -15,6 +15,18 @@ export class ImageRepository implements IImageRepository {
     @InjectRepository(Transaction)
     private typeormTransaction: Repository<Transaction>,
   ) {}
+
+  async findImagesByUserId(userId: string): Promise<Image[]> {
+    const images = await this.typeorm.find({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+
+    return images;
+  }
   async findTransactionById(id: string): Promise<Transaction> {
     const transaction = this.typeormTransaction.findOne({
       where: {

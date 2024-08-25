@@ -19,4 +19,5 @@ export interface IImageRepository {
   delete(id: string): Promise<void>;
   findById(id: string): Promise<Image>;
   findTransactionById(id: string): Promise<Transaction>;
+  findImagesByUserId(userId: string): Promise<Image[]>;
 }
