@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../../user/entities/user.entity';
@@ -12,7 +12,7 @@ export class UserRepository implements IUserRepository {
   ) {}
 
   async findByEmail(email: string): Promise<User> {
-    const user = await this.typeorm.findOneOrFail({
+    const user = await this.typeorm.findOne({
       where: {
         email,
       },
@@ -21,13 +21,17 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  create(data: Omit<User, 'id'>): Promise<User> {
+  async create(data: Omit<User, 'id'>): Promise<User> {
     const user = this.typeorm.create(data);
-    return this.typeorm.save(user);
+    return await this.typeorm.save(user);
   }
 
-  update(data: Partial<User>): Promise<User> {
-    throw new Error('Method not implemented.');
+  async update(data: Partial<User>): Promise<User> {
+    let user = await this.findById(data.id);
+
+    user = Object.assign(user, data);
+
+    return await this.typeorm.save(user);
   }
 
   async findById(id: string): Promise<User> {
@@ -41,11 +45,17 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  findAll(): Promise<User[]> {
-    throw new Error('Method not implemented.');
-  }
+  async delete(id: string): Promise<boolean> {
+    try {
+      await this.typeorm.delete({
+        id,
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Não foi Possível atualizar o usuário: ' + error,
+      );
+    }
 
-  delete(id: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    return true;
   }
 }
