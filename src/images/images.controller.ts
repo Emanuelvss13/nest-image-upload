@@ -48,6 +48,7 @@ export class ImagesController {
   }
 
   @Get('/transaction/:id')
+  @UseGuards(JwtAuthGuard)
   findTransactionById(@Param('id') id: string) {
     return this.imagesService.findTransactionById(id);
   }
