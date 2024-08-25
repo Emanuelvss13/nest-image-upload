@@ -5,69 +5,36 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Descrição do Desafio:
+Você é responsável por criar uma API usando NestJS que permita o upload, armazenamento e gerenciamento de imagens utilizando o Cloudinary como serviço de armazenamento na nuvem. A API deve ser integrada com um banco de dados Postgres para manter as informações relacionadas às imagens sincronizadas. Além disso, a API deve incluir um sistema de autenticação que permita a criação de usuários, onde cada usuário poderá gerenciar suas próprias imagens.
 
-## Installation
+Requisitos:
+1.Tecnologias:
+   - NestJS ( https://docs.nestjs.com/ , escolha uma ORM de sua prefrencia)
+   - Postgres ( https://www.postgresql.org/ )
+   - Cloudinary ( https://cloudinary.com/ , crie um conta gratuita para poder realizar o desafio)
+   - JWT (JSON Web Token) para autenticação
 
-```bash
-$ npm install
-```
+2.Funcionalidades:
+   -Autenticação de Usuário:
+  - Implementar um sistema de autenticação usando JWT.
+  - A API deve permitir o registro e login de usuários.
+  - Cada usuário deve ter suas próprias credenciais (email e senha).
+   -Upload de Imagem:
+- A API deve permitir que usuários autenticados façam upload de imagens para o Cloudinary.
+- As informações sobre a imagem (URL, ID do Cloudinary, etc.) devem ser salvas no banco de dados Postgres e associadas ao usuário que fez o upload.
+   -Listagem de Imagens:
+- A API deve permitir que os usuários autenticados listem todas as imagens que eles próprios carregaram, recuperando as informações do banco de dados.
+   -Deleção de Imagem:
+- A API deve permitir que usuários autenticados deletem suas próprias imagens.
+  - A deleção deve ser refletida tanto no Cloudinary quanto no banco de dados.
+   -Sincronização:
+- A aplicação deve garantir que os dados entre o banco de dados Postgres e o Cloudinary estejam sempre sincronizados.
+- Se uma operação falhar, a API deve ser capaz de lidar com isso e garantir que não haja inconsistências nos dados.
 
-## Running the app
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+   -Desafio Extra (Opcional):
+  - Implemente uma função de recuperação que, ao detectar uma inconsistência entre o Cloudinary e o banco de dados (por exemplo, uma imagem existente no banco de dados que foi deletada no Cloudinary), resolva automaticamente o problema.
