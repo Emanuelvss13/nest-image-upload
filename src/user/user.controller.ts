@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/custom-decorators/auth.guard';
 import { CurrentUser } from '../auth/custom-decorators/current-user.decorator';
+import { removeUserPassword } from '../global/utils/remove-user-password.util';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserWithoutPassword } from './entities/reponse/user-without-password.response';
@@ -26,10 +27,7 @@ export class UserController {
   ): Promise<IUserWithoutPassword> {
     const user = await this.userService.create(createUserDto);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPass } = user;
-
-    return userWithoutPass;
+    return removeUserPassword(user);
   }
 
   @Get(':id')
@@ -37,10 +35,7 @@ export class UserController {
   async findOne(@Param('id') id: string): Promise<IUserWithoutPassword> {
     const user = await this.userService.findOne(id);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPass } = user;
-
-    return userWithoutPass;
+    return removeUserPassword(user);
   }
 
   @Patch(':id')
@@ -49,17 +44,14 @@ export class UserController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @CurrentUser() { id: currentUserId }: User,
-  ) {
+  ): Promise<IUserWithoutPassword> {
     const user = await this.userService.update(
       id,
       updateUserDto,
       currentUserId,
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPass } = user;
-
-    return userWithoutPass;
+    return removeUserPassword(user);
   }
 
   @Delete(':id')

@@ -1,4 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { removeUserPassword } from '../global/utils/remove-user-password.util';
+import { IUserWithoutPassword } from '../user/entities/reponse/user-without-password.response';
 import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './custom-decorators/auth.guard';
@@ -15,7 +17,7 @@ export class AuthController {
 
   @Get('whoami')
   @UseGuards(JwtAuthGuard)
-  async whoami(@CurrentUser() user: User) {
-    return user;
+  async whoami(@CurrentUser() user: User): Promise<IUserWithoutPassword> {
+    return removeUserPassword(user);
   }
 }
