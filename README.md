@@ -7,40 +7,48 @@
 
 
 
-Descrição do Desafio:
+# Descrição do Desafio:
 Você é responsável por criar uma API usando NestJS que permita o upload, armazenamento e gerenciamento de imagens utilizando o Cloudinary como serviço de armazenamento na nuvem. A API deve ser integrada com um banco de dados Postgres para manter as informações relacionadas às imagens sincronizadas. Além disso, a API deve incluir um sistema de autenticação que permita a criação de usuários, onde cada usuário poderá gerenciar suas próprias imagens.
 
-Requisitos:
-1.Tecnologias:
+## Requisitos:
+### 1.Tecnologias:
    - NestJS ( https://docs.nestjs.com/ , escolha uma ORM de sua prefrencia)
    - Postgres ( https://www.postgresql.org/ )
    - Cloudinary ( https://cloudinary.com/ , crie um conta gratuita para poder realizar o desafio)
    - JWT (JSON Web Token) para autenticação
 
-2.Funcionalidades:
-   -Autenticação de Usuário:
+### 2. Funcionalidades:
+   #### Autenticação de Usuário: :white_check_mark:
   - Implementar um sistema de autenticação usando JWT.
   - A API deve permitir o registro e login de usuários.
   - Cada usuário deve ter suas próprias credenciais (email e senha).
-   -Upload de Imagem:
-- A API deve permitir que usuários autenticados façam upload de imagens para o Cloudinary.
-- As informações sobre a imagem (URL, ID do Cloudinary, etc.) devem ser salvas no banco de dados Postgres e associadas ao usuário que fez o upload.
-   -Listagem de Imagens:
-- A API deve permitir que os usuários autenticados listem todas as imagens que eles próprios carregaram, recuperando as informações do banco de dados.
-   -Deleção de Imagem:
-- A API deve permitir que usuários autenticados deletem suas próprias imagens.
+  - Upload de Imagem:
+  - A API deve permitir que usuários autenticados façam upload de imagens para o Cloudinary.
+  - As informações sobre a imagem (URL, ID do Cloudinary, etc.) devem ser salvas no banco de dados Postgres e associadas ao usuário que fez o upload.
+  
+  #### Listagem de Imagens: :white_check_mark:
+  - A API deve permitir que os usuários autenticados listem todas as imagens que eles próprios carregaram, recuperando as informações do banco de dados.
+  - Deleção de Imagem:
+  - A API deve permitir que usuários autenticados deletem suas próprias imagens.
   - A deleção deve ser refletida tanto no Cloudinary quanto no banco de dados.
-   -Sincronização:
-- A aplicação deve garantir que os dados entre o banco de dados Postgres e o Cloudinary estejam sempre sincronizados.
-- Se uma operação falhar, a API deve ser capaz de lidar com isso e garantir que não haja inconsistências nos dados.
+  
+  #### Sincronização: :white_check_mark:
+  - A aplicação deve garantir que os dados entre o banco de dados Postgres e o Cloudinary estejam sempre sincronizados.
+  - Se uma operação falhar, a API deve ser capaz de lidar com isso e garantir que não haja inconsistências nos dados.
 
-   -Desafio Extra (Opcional):
+  #### Desafio Extra (Opcional): :white_check_mark:
   - Implemente uma função de recuperação que, ao detectar uma inconsistência entre o Cloudinary e o banco de dados (por exemplo, uma imagem existente no banco de dados que foi deletada no Cloudinary), resolva automaticamente o problema.
+
+## Instruções:
  
 ```bash
-# Se tiver o dokcer instalado, rode esse comando para criar um banco de dados:
-$ dokcer compose up -d
+# Preencha o arquivo .env com base no arquivo .example.env contido neste repositorio.
 
-# Rode a aplicação:
-$ npm run start
+# Faça o build da aplicação com docker:
+$ docker compose up --build
+
+# Para rodar o script que detecta inconsistências entre o Cloudinary e o banco de dados, utilize:
+$ npm run check:inconsistency
+
+# Utilize o arquivo requests.json para ver todas as requisições disponiveis neste projeto
 ```
